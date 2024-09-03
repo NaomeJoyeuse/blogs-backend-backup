@@ -83,10 +83,8 @@ router.get('/blogs', isAuthenticated,blogController.getAllBlogPosts);
  */
 
 router.post('/blogs', isAuthenticated,upload,blogController.createBlogPost);
-
 router.post('/blog', isAuthenticated, blogController.createBlog);
   
-
 /**
  * @swagger
  * /api/blogs/{id}:
