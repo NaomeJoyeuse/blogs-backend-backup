@@ -83,6 +83,10 @@ router.get('/blogs', isAuthenticated,blogController.getAllBlogPosts);
  */
 
 router.post('/blogs', isAuthenticated,upload,blogController.createBlogPost);
+<<<<<<< HEAD
+=======
+
+>>>>>>> f3f585341d0a9cbcb879f5f3635b017bca630369
 router.post('/blog', isAuthenticated, blogController.createBlog);
   
 /**
