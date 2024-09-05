@@ -13,6 +13,8 @@ const { isAuthenticated } = require('../middlewares/authentication');
  *   get:
  *     summary: Get all Blogs
  *     tags: [Blogs]
+ *     security:
+ *       - bearerAuth: []  
  *     responses:
  *       '200':
  *         description: Successfully retrieved all Blogs
@@ -22,6 +24,8 @@ const { isAuthenticated } = require('../middlewares/authentication');
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Blog'
+ *       '401':
+ *         description: Unauthorized - User authentication failed
  *       '500':
  *         description: Internal server error
  */
@@ -92,6 +96,8 @@ router.post('/blog', isAuthenticated, blogController.createBlog);
  *   get:
  *     summary: Get a specific blog by ID
  *     tags: [Blogs]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: blogId
