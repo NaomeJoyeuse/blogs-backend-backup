@@ -100,7 +100,7 @@ router.post('/blog', isAuthenticated, blogController.createBlog);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: blogId
+ *         name: id
  *         required: true
  *         description: ID of the blog to retrieve
  *         schema:
