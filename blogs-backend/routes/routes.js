@@ -30,7 +30,7 @@ const { isAuthenticated } = require('../middlewares/authentication');
  *         description: Internal server error
  */
 
-router.get('/blogs', isAuthenticated,blogController.getAllBlogPosts);
+router.get('/blogs',blogController.getAllBlogPosts);
 
 /**
  * @openapi
