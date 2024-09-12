@@ -284,16 +284,36 @@ const schema = Joi.object({
    }
 };
 
+// exports.getAllBlogPosts = async (req, res) => {
+//   try {
+//     const posts = await Post.find();
+//     res.send(posts);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
 exports.getAllBlogPosts = async (req, res) => {
-  try {
-    const posts = await Post.find();
-    res.send(posts);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
+    try {
+      const posts = await Post.find()
+        .populate('Likes') // Populate the Likes field
+        .lean() // Convert to plain JavaScript object
+        .exec();
+  
+      // Map over the posts to include the like count
+      const postsWithLikeCount = posts.map(post => ({
+        ...post,
+        likesCount: post.Likes.length,
+        Likes: undefined // Remove the Likes array to avoid sending unnecessary data
+      }));
+  
+      res.status(200).json(postsWithLikeCount);
+    } catch (error) {
+      console.error('Error fetching blog posts:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
 exports.getBlogById = async (req, res) => {
 
          try{
@@ -360,36 +380,40 @@ exports.SaveComment = async (req, res) => {
 };
 
 
-exports.likeBlog = async (req, res) => {
-    try {
-        const userId = req.user._id; 
-        const postId = req.params.id; 
-        const Liked_before = await Likes.findOne({ postId: postId, user: userId});
+    exports.likeBlog = async (req, res) => {
+        try {
+            const userId = req.user._id; 
+            const postId = req.params.id; 
+            const Liked_before = await Likes.findOne({ postId: postId, user: userId});
 
-        if (Liked_before) {
-            await Likes.deleteOne({ _id: Liked_before._id });
-            res.status(200).json({ message: 'Like removed' });
-        } else {
-            const newLike = new Likes({ postId, user: userId});
-            await newLike.save();
-            res.status(201).json({ message: 'Like added', like: newLike })
+            if (Liked_before) {
+                await Likes.deleteOne({ _id: Liked_before._id });
+                res.status(200).json({ message: 'Like removed' });
+            } else {
+                const newLike = new Likes({ postId, user: userId});
+                await newLike.save();
+                res.status(201).json({ message: 'Like added', like: newLike })
+                // const updatedLikesCount = await Likes.countDocuments({ postId: postId });
+                // await Blog.findByIdAndUpdate(postId, { likesCount: updatedLikesCount });
+
+                // res.status(200).json({ likeCount: updatedLikesCount });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Server error' });
         }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
+    };
 
-exports.CountLikes = async (req, res) => {
-    try {
-        const postId = req.params.id; 
-        const likeCount = await Likes.countDocuments({ postId: postId });
-        res.status(200).json({ likeCount });
-    } catch (error) {
-        res.status(404)
-        res.send({  error: 'Post not found'})
-    }
-};
+    exports.CountLikes = async (req, res) => {
+        try {
+            const postId = req.params.id; 
+            const likeCount = await Likes.countDocuments({ postId: postId });
+            res.status(200).json({ likeCount });
+        } catch (error) {
+            res.status(404)
+            res.send({  error: 'Post not found'})
+        }
+    };
 
 exports.getAllLikesAndUsers = async (req, res) => {
     try {
