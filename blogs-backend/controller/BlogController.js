@@ -295,16 +295,22 @@ const schema = Joi.object({
 // };
 exports.getAllBlogPosts = async (req, res) => {
     try {
-      const posts = await Post.find()
-        .populate('Likes') // Populate the Likes field
-        .lean() // Convert to plain JavaScript object
-        .exec();
+      const posts = await Post.find().lean().exec();
   
-      // Map over the posts to include the like count
+      // Fetch likes counts for all posts in a single query
+      const likesCountMap = await Likes.aggregate([
+        { $group: { _id: '$postId', count: { $sum: 1 } } }
+      ]).then(results => 
+        results.reduce((map, { _id, count }) => {
+          map[_id.toString()] = count;
+          return map;
+        }, {})
+      );
+  
+      // Add likes count to each post
       const postsWithLikeCount = posts.map(post => ({
         ...post,
-        likesCount: post.Likes.length,
-        Likes: undefined // Remove the Likes array to avoid sending unnecessary data
+        likesCount: likesCountMap[post._id.toString()] || 0
       }));
   
       res.status(200).json(postsWithLikeCount);
@@ -313,7 +319,7 @@ exports.getAllBlogPosts = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
-  
+
 exports.getBlogById = async (req, res) => {
 
          try{
