@@ -338,6 +338,7 @@ router.get('/blogs/:id/likes',blogController.CountLikes);
  */
 
 router.get('/blogs/:id/likeusers',isAuthenticated ,blogController.getAllLikesAndUsers);
+router.get('/blogs/likes',blogController.getAllLikes);
 
 
 /**

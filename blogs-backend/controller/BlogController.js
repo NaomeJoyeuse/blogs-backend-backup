@@ -437,6 +437,22 @@ exports.getAllLikesAndUsers = async (req, res) => {
     }
 };
 
+exports.getAllLikes = async (req, res) => {
+    try {
+        const likes = await Likes.find().populate('user', 'name email');
+
+        if (!likes || likes.length === 0) {
+            return res.status(404).json({ message: 'No likes found' });
+        }
+
+        res.status(200).json({ likes });
+    } catch (error) {
+        console.error('Error fetching all likes:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
 exports.GetComment = async (req, res) => {
     try {
         const postId = req.params.id;
