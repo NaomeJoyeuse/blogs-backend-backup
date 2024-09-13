@@ -324,10 +324,8 @@ exports.getBlogById = async (req, res) => {
 
          try{
            const post = await Post.findOne({_id: req.params.id});
-           const likesCount = await Likes.countDocuments({ postId: req.params.id }).exec();
-        
-        res.status(200).json({ ...post, likesCount });
-            //  res.send(post)
+           
+            res.send(post)
             }catch{
               res.status(404).send("Post not found")
            }

@@ -102,9 +102,8 @@ afterAll(async () => {
       .get(`/api/blogs/${createdBlogId}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
-      const blogPost = res.body._doc || res.body;
-      expect(blogPost).toHaveProperty('title', 'Test Blog');
-    // expect(res.body).toHaveProperty('title', 'Test Blog');
+
+    expect(res.body).toHaveProperty('title', 'Test Blog');
   });
 
   it('should update a blog post', async () => {

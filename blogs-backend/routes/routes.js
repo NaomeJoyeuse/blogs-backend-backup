@@ -301,7 +301,7 @@ router.post('/blogs/:id/like',isAuthenticated, blogController.likeBlog);
  *         description: Internal server error
  */
 
-router.get('/blogs/:id/likes',isAuthenticated ,blogController.CountLikes);
+router.get('/blogs/:id/likes',blogController.CountLikes);
 
 /**
  * @openapi
@@ -373,7 +373,7 @@ router.get('/blogs/:id/likeusers',isAuthenticated ,blogController.getAllLikesAnd
  *       '500':
  *         description: Internal server error
  */
-router.get('/blogs/:id/comments',isAuthenticated, blogController.GetComment);
+router.get('/blogs/:id/comments',blogController.GetComment);
 
 router.post('/users', userController.signup);
 
