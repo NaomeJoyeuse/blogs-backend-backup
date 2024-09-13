@@ -378,7 +378,7 @@ router.get('/blogs/:id/comments',blogController.GetComment);
 
 /**
  * @swagger
- * /api/blogs/comments/count:
+ * /api/blogs/comments:
  *   get:
  *     summary: Get the total number of comments
  *     description: Retrieves the total number of comments across all blog posts.
