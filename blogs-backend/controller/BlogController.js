@@ -324,7 +324,10 @@ exports.getBlogById = async (req, res) => {
 
          try{
            const post = await Post.findOne({_id: req.params.id});
-            res.send(post)
+           const likesCount = await Likes.countDocuments({ postId: req.params.id }).exec();
+        
+        res.status(200).json({ ...post, likesCount });
+            //  res.send(post)
             }catch{
               res.status(404).send("Post not found")
            }
@@ -399,10 +402,8 @@ exports.SaveComment = async (req, res) => {
                 const newLike = new Likes({ postId, user: userId});
                 await newLike.save();
                 res.status(201).json({ message: 'Like added', like: newLike })
-                // const updatedLikesCount = await Likes.countDocuments({ postId: postId });
-                // await Blog.findByIdAndUpdate(postId, { likesCount: updatedLikesCount });
-
-                // res.status(200).json({ likeCount: updatedLikesCount });
+                
+                
             }
         } catch (error) {
             console.error(error);
