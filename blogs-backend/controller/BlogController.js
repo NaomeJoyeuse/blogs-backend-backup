@@ -449,3 +449,13 @@ exports.GetComment = async (req, res) => {
         res.send({  message: 'Post not found'})
     }
 };
+exports.getTotalCommentsCount = async (req, res) => {
+    try {
+      
+        const totalCommentsCount = await Comment.countDocuments();
+        res.status(200).json({ totalCommentsCount });
+    } catch (error) {
+        console.error('Error fetching total comments count:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

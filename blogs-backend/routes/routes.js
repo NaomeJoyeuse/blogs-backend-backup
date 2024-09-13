@@ -375,6 +375,39 @@ router.get('/blogs/:id/likeusers',isAuthenticated ,blogController.getAllLikesAnd
  */
 router.get('/blogs/:id/comments',blogController.GetComment);
 
+/**
+ * @swagger
+ * /api/blogs/comments/count:
+ *   get:
+ *     summary: Get the total number of comments
+ *     description: Retrieves the total number of comments across all blog posts.
+ *     tags: [Comments]
+ *     responses:
+ *       200:
+ *         description: The total number of comments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalCommentsCount:
+ *                   type: integer
+ *                   example: 123
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server error
+ */
+
+router.get('/blogs/comments',blogController.getTotalCommentsCount);
+
+
 router.post('/users', userController.signup);
 
 router.post('/user', userController.login);
