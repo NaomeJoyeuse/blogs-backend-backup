@@ -7,7 +7,7 @@ exports.signup = async (req, res) => {
   try {
     const {name, email, password } = req.body;
    
-    const newUser = new UserModel({ name,email, password});
+    const newUser = new UserModel({ name, email, password});
     await newUser.save();
     res.status(201).json({ message: 'Signup successful', user: newUser });
   } catch (error) {
