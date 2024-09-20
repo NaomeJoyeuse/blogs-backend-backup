@@ -4,9 +4,8 @@ const bcrypt = require('bcryptjs');
 
 exports.signup = async (req, res) => {
   try {
-    const { email, password } = req.body;
-   
-    const newUser = new UserModel({ email, password});
+    const { email, password, role } = req.body; 
+    const newUser = new UserModel({ email, password, role }); 
     await newUser.save();
     res.status(201).json({ message: 'Signup successful', user: newUser });
   } catch (error) {
@@ -27,7 +26,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Authentication failed' });
     }
 
-    const token = jwt.sign({ id: user._id }, 'secret_key123', { expiresIn: '5m' });
+    const token = jwt.sign({ id: user._id, role: user.role  }, 'secret_key123', { expiresIn: '5m' });
     
 
     res.status(200).json({ message: 'Login successful', token: `Bearer ${token}` });
