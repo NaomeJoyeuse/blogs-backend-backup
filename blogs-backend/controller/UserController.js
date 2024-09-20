@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, 'secret_key123', { expiresIn: '7m' });
     
 
-    res.status(200).json({ message: 'Login successful', token: `Bearer ${token}`,role: User.role});
+    res.status(200).json({ message: 'Login successful', token: `Bearer ${token}`,role: user.role});
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error });
   }
